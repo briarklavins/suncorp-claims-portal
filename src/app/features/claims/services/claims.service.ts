@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { Claim, ClaimStatus } from '../../../shared/models/claim.model';
 import { LoggingService } from '../../../core/services/logging.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ClaimsService {
 
   private readonly baseUrl = environment.claimsApiBaseUrl + '/claims';

@@ -8,7 +8,6 @@ import { ClaimLodgementComponent } from './components/claim-lodgement/claim-lodg
 import { IncidentDetailsStepComponent } from './components/claim-lodgement/incident-details-step.component';
 import { SettlementStepComponent } from './components/claim-lodgement/settlement-step.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
-import { ClaimsService } from './services/claims.service';
 import { LegacyDocumentService } from './services/legacy-document.service';
 import { SmashRepairerService } from './services/smash-repairer.service';
 
@@ -26,7 +25,6 @@ import { SmashRepairerService } from './services/smash-repairer.service';
     ClaimsRoutingModule
   ],
   providers: [
-    ClaimsService,
     LegacyDocumentService,
     SmashRepairerService
   ]

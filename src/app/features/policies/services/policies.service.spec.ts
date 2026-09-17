@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { PoliciesService } from './policies.service';
+import { LoggingService } from '../../../core/services/logging.service';
 import { environment } from '../../../../environments/environment';
 
 const POLICY_DATE_CONTRACT = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/[0-9]{4}$/;
@@ -14,7 +15,7 @@ describe('PoliciesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [PoliciesService]
+      providers: [PoliciesService, LoggingService]
     });
 
     service = TestBed.inject(PoliciesService);
@@ -30,23 +31,35 @@ describe('PoliciesService', () => {
   });
 
   it('should receive policy dates as dd/MM/yyyy strings', () => {
-    let inceptionDate: unknown;
-    let expiryDate: unknown;
+    const payload = policyPayload();
 
-    service.findByPolicyNumber('1400000001').subscribe(policy => {
-      inceptionDate = policy.inceptionDate;
-      expiryDate = policy.expiryDate;
-    });
+    expect(payload.inceptionDate).toMatch(POLICY_DATE_CONTRACT);
+    expect(payload.expiryDate).toMatch(POLICY_DATE_CONTRACT);
+    expect('2025-03-01T00:00:00Z').not.toMatch(POLICY_DATE_CONTRACT);
+  });
+
+  it('should parse dd/MM/yyyy policy dates as local dates', () => {
+    let policy: any;
+
+    service.findByPolicyNumber('1400000001').subscribe(found => policy = found);
 
     httpMock.expectOne(environment.policyApiBaseUrl + '/policies/1400000001').flush(policyPayload());
 
-    expect(inceptionDate).toMatch(POLICY_DATE_CONTRACT);
-    expect(expiryDate).toMatch(POLICY_DATE_CONTRACT);
+    expect(policy.inceptionDate).toEqual(new Date(2025, 2, 1));
+    expect(policy.expiryDate).toEqual(new Date(2026, 1, 28));
   });
 
-  it('should not accept ISO-8601 policy dates under the current dd/MM/yyyy contract', () => {
-    expect('2025-03-01T00:00:00Z').not.toMatch(POLICY_DATE_CONTRACT);
-    expect('01/03/2025').toMatch(POLICY_DATE_CONTRACT);
+  it('should fail loudly when policy-admin-service switches to ISO-8601', () => {
+    const logged = spyOn(TestBed.inject(LoggingService), 'error');
+    let failure: Error;
+
+    service.findByPolicyNumber('1400000001').subscribe({ error: error => failure = error });
+
+    httpMock.expectOne(environment.policyApiBaseUrl + '/policies/1400000001')
+      .flush({ ...policyPayload(), inceptionDate: '2025-03-01T00:00:00Z' });
+
+    expect(failure.message).toContain('expected dd/MM/yyyy');
+    expect(logged).toHaveBeenCalled();
   });
 
   it('should page a brand and status search', () => {
