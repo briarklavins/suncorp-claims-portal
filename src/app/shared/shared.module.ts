@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -76,6 +76,7 @@ const MATERIAL_MODULES = [
     TimeAgoPipe,
     AutofocusDirective,
     UppercaseRegoDirective
-  ]
+  ],
+  providers: [CurrencyPipe]
 })
 export class SharedModule { }
