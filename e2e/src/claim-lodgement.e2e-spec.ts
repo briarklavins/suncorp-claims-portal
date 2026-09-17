@@ -1,29 +1,39 @@
-import { browser, logging } from 'protractor';
+import { expect, test } from '@playwright/test';
 
 import { ClaimLodgementPage } from './claim-lodgement.po';
 
-describe('Claim lodgement', () => {
+test.describe('Claim lodgement', () => {
 
-  let page: ClaimLodgementPage;
+  let severeConsoleErrors: string[];
 
-  beforeEach(() => {
-    page = new ClaimLodgementPage();
+  test.beforeEach(({ page }) => {
+    severeConsoleErrors = [];
+    page.on('console', message => {
+      if (message.type() === 'error') {
+        severeConsoleErrors.push(message.text());
+      }
+    });
   });
 
-  it('should display the lodgement wizard', () => {
-    page.navigateTo();
-    expect(page.pageHeading()).toEqual('Lodge a claim');
+  test.afterEach(() => {
+    expect(severeConsoleErrors).toEqual([]);
   });
 
-  it('should validate the policy number format', () => {
-    page.navigateTo();
-    page.policyNumberField().sendKeys('123');
-    page.findPolicyButton().click();
-    expect(page.claimTypeSelect().isPresent()).toBeFalsy();
+  test('should display the lodgement wizard', async ({ page }) => {
+    const lodgement = new ClaimLodgementPage(page);
+
+    await lodgement.navigateTo();
+
+    await expect(lodgement.pageHeading()).toHaveText('Lodge a claim');
   });
 
-  afterEach(async () => {
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({ level: logging.Level.SEVERE } as logging.Entry));
+  test('should validate the policy number format', async ({ page }) => {
+    const lodgement = new ClaimLodgementPage(page);
+
+    await lodgement.navigateTo();
+    await lodgement.policyNumberField().fill('123');
+    await lodgement.findPolicyButton().click();
+
+    await expect(lodgement.claimTypeSelect()).toHaveCount(0);
   });
 });
