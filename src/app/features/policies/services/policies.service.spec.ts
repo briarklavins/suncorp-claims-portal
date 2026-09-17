@@ -62,6 +62,18 @@ describe('PoliciesService', () => {
     expect(logged).toHaveBeenCalled();
   });
 
+  it('should reject impossible calendar dates instead of rolling them over', () => {
+    spyOn(TestBed.inject(LoggingService), 'error');
+    let failure: Error;
+
+    service.findByPolicyNumber('1400000001').subscribe({ error: error => failure = error });
+
+    httpMock.expectOne(environment.policyApiBaseUrl + '/policies/1400000001')
+      .flush({ ...policyPayload(), expiryDate: '31/02/2026' });
+
+    expect(failure.message).toContain('expiryDate="31/02/2026"');
+  });
+
   it('should page a brand and status search', () => {
     service.search('AAM', 'ACTIVE', 2).subscribe();
 

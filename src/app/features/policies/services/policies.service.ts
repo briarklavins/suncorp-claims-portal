@@ -46,13 +46,18 @@ export class PoliciesService {
 
   private parsePolicyDate(value: Date | string, field: string): Date {
     const parts = POLICY_DATE_CONTRACT.exec(String(value));
+    const parsed = parts && new Date(Number(parts[3]), Number(parts[2]) - 1, Number(parts[1]));
+    const isCalendarDate = parsed
+      && parsed.getDate() === Number(parts[1])
+      && parsed.getMonth() === Number(parts[2]) - 1
+      && parsed.getFullYear() === Number(parts[3]);
 
-    if (!parts) {
+    if (!isCalendarDate) {
       const message = 'policy-admin-service returned ' + field + '="' + value + '", expected dd/MM/yyyy';
       this.loggingService.error(message);
       throw new Error(message);
     }
 
-    return new Date(Number(parts[3]), Number(parts[2]) - 1, Number(parts[1]));
+    return parsed;
   }
 }
