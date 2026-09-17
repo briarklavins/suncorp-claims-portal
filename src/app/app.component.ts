@@ -14,11 +14,10 @@ import { Brand } from './shared/models/brand.model';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  // No static flag - relies on the Angular 8 default resolution behaviour
-  @ViewChild(MatSidenav)
+  @ViewChild(MatSidenav, { static: false })
   sidenav: MatSidenav;
 
-  @ViewChild('mainContent')
+  @ViewChild('mainContent', { static: false })
   mainContent: ElementRef;
 
   brand: Brand;

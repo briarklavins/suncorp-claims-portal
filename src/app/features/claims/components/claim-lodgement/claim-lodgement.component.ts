@@ -17,7 +17,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 })
 export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
 
-  @ViewChild(MatStepper)
+  @ViewChild(MatStepper, { static: false })
   stepper: MatStepper;
 
   policyForm: FormGroup;

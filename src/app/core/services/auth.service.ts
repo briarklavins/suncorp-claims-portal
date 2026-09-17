@@ -14,10 +14,12 @@ import { Consultant } from '../../shared/models/consultant.model';
 @Injectable()
 export class AuthService {
 
+  currentUser$: Observable<Consultant>;
+
   private currentUserSubject = new BehaviorSubject<Consultant>(null);
-  currentUser$: Observable<Consultant> = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    this.currentUser$ = this.currentUserSubject.asObservable();
   }
 
   loadProfile(): Observable<Consultant> {

@@ -17,10 +17,10 @@ export class ClaimListComponent implements OnInit {
   searchControl = new FormControl('');
   loading = true;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: false })
   sort: MatSort;
 
   constructor(private claimsService: ClaimsService) {
