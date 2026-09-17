@@ -79,9 +79,6 @@ const MATERIAL_MODULES = [
     TimeAgoPipe,
     AutofocusDirective,
     UppercaseRegoDirective
-  ],
-  entryComponents: [
-    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }

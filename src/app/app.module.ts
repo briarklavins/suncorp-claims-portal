@@ -29,9 +29,6 @@ import { SessionTimeoutDialogComponent } from './core/components/session-timeout
     SharedModule,
     AppRoutingModule
   ],
-  entryComponents: [
-    SessionTimeoutDialogComponent
-  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
