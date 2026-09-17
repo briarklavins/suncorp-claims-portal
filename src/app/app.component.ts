@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
@@ -14,11 +14,10 @@ import { Brand } from './shared/models/brand.model';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  // No static flag - relies on the Angular 8 default resolution behaviour
-  @ViewChild(MatSidenav)
+  @ViewChild(MatSidenav, { static: false })
   sidenav: MatSidenav;
 
-  @ViewChild('mainContent')
+  @ViewChild('mainContent', { static: false })
   mainContent: ElementRef;
 
   brand: Brand;

@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatStepper, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 import { ClaimsService } from '../../services/claims.service';
 import { PoliciesService } from '../../../policies/services/policies.service';
@@ -17,7 +18,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 })
 export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
 
-  @ViewChild(MatStepper)
+  @ViewChild(MatStepper, { static: false })
   stepper: MatStepper;
 
   policyForm: FormGroup;

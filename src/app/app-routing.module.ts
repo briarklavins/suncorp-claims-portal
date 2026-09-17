@@ -11,12 +11,12 @@ const routes: Routes = [
   {
     path: 'claims',
     canActivate: [AuthGuard],
-    loadChildren: './features/claims/claims.module#ClaimsModule'
+    loadChildren: () => import('./features/claims/claims.module').then(m => m.ClaimsModule)
   },
   {
     path: 'policies',
     canActivate: [AuthGuard],
-    loadChildren: './features/policies/policies.module#PoliciesModule'
+    loadChildren: () => import('./features/policies/policies.module').then(m => m.PoliciesModule)
   },
   { path: '**', component: PageNotFoundComponent }
 ];
