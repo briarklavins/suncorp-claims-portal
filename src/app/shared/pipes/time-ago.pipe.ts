@@ -7,7 +7,7 @@ const WEEK = DAY * 7;
 const MONTH = DAY * 30;
 const YEAR = DAY * 365;
 
-@Pipe({ name: 'timeAgo' })
+@Pipe({ name: 'timeAgo', pure: false })
 export class TimeAgoPipe implements PipeTransform {
 
   private readonly formatter = new Intl.RelativeTimeFormat('en-AU', { numeric: 'auto' });
