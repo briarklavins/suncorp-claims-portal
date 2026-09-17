@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "src/themes/suncorp-theme.scss"
             ],
@@ -91,6 +92,7 @@
                 }
               ],
               "styles": [
+                "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
                 "src/styles.scss",
                 "src/themes/aami-theme.scss"
               ]
@@ -120,6 +122,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "assets": [

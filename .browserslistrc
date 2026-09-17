@@ -1,7 +1,6 @@
-# Suncorp digital supports the browsers below (SOE is IE11 for contact centre desktops)
+# Suncorp digital supports the evergreen browsers below (IE11 dropped with Angular 13)
 > 0.5%
 last 2 versions
 Firefox ESR
-IE 11
-IE 10
 not dead
+not IE 9-11

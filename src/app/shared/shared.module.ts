@@ -82,9 +82,6 @@ const MATERIAL_MODULES = [
   ],
   providers: [
     CurrencyPipe
-  ],
-  entryComponents: [
-    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }
