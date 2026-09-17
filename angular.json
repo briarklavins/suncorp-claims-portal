@@ -150,8 +150,9 @@
       }
     }
   },
-  "defaultProject": "suncorp-claims-portal",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
