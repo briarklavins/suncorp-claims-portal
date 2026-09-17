@@ -19,13 +19,13 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
   searchControl = new FormControl('');
   loading = true;
 
-  @ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator)
   paginator: MatPaginator;
 
   sort: MatSort;
 
   // The table lives inside *ngIf="!loading", so MatSort only exists once the claims have loaded.
-  @ViewChild(MatSort, { static: false })
+  @ViewChild(MatSort)
   set sortRef(sort: MatSort) {
     this.sort = sort;
     if (sort) {

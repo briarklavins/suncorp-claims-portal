@@ -16,7 +16,7 @@ export class DocumentUploadComponent {
   @Input()
   claimNumber: string;
 
-  @ViewChild('fileInput', { static: false })
+  @ViewChild('fileInput')
   fileInput: ElementRef;
 
   uploaded: ClaimDocument[] = [];

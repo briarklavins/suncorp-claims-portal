@@ -14,10 +14,10 @@ import { Brand } from './shared/models/brand.model';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSidenav, { static: false })
+  @ViewChild(MatSidenav)
   sidenav: MatSidenav;
 
-  @ViewChild('mainContent', { static: false })
+  @ViewChild('mainContent')
   mainContent: ElementRef;
 
   brand: Brand;
