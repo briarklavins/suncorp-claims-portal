@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Policy, PolicySummary } from '../../../shared/models/policy.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PoliciesService {
 
   private readonly baseUrl = environment.policyApiBaseUrl + '/policies';

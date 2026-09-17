@@ -6,7 +6,13 @@ test.describe('Claim lodgement', () => {
 
   let severeConsoleErrors: string[];
 
-  test.beforeEach(({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
+    await context.addCookies([{
+      name: 'SMSESSION',
+      value: 'e2e-consultant-session',
+      url: page.url().startsWith('http') ? page.url() : (process.env.E2E_BASE_URL || 'http://localhost:4200')
+    }]);
+
     severeConsoleErrors = [];
     page.on('console', message => {
       if (message.type() === 'error') {
@@ -34,6 +40,7 @@ test.describe('Claim lodgement', () => {
     await lodgement.policyNumberField().fill('123');
     await lodgement.findPolicyButton().click();
 
-    await expect(lodgement.claimTypeSelect()).toHaveCount(0);
+    await expect(lodgement.policyNumberError()).toBeVisible();
+    await expect(lodgement.selectedStepLabel()).toHaveText('Policy');
   });
 });

@@ -17,6 +17,14 @@ export class ClaimLodgementPage {
     return this.page.getByRole('button', { name: 'Find policy' });
   }
 
+  policyNumberError(): Locator {
+    return this.page.locator('mat-error');
+  }
+
+  selectedStepLabel(): Locator {
+    return this.page.locator('.mat-step-header[aria-selected="true"] .mat-step-text-label');
+  }
+
   claimTypeSelect(): Locator {
     return this.page.locator('mat-select[formcontrolname="claimType"]');
   }
