@@ -23,7 +23,7 @@ export class LoggingService {
       detail: error ? String(error.message || error) : null,
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString()
-    }).subscribe(() => { }, () => { });
+    }).subscribe({ error: () => { } });
   }
 
   audit(action: string, claimNumber: string): void {

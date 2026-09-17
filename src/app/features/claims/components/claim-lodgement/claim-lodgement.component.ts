@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatStepper, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 import { ClaimsService } from '../../services/claims.service';
 import { PoliciesService } from '../../../policies/services/policies.service';
@@ -20,10 +21,10 @@ export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
   @ViewChild(MatStepper)
   stepper: MatStepper;
 
-  policyForm: FormGroup;
-  incidentForm: FormGroup;
-  settlementForm: FormGroup;
-  declarationForm: FormGroup;
+  policyForm: UntypedFormGroup;
+  incidentForm: UntypedFormGroup;
+  settlementForm: UntypedFormGroup;
+  declarationForm: UntypedFormGroup;
 
   policy: Policy;
   submitting = false;
@@ -31,7 +32,7 @@ export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
 
   readonly states = ['QLD', 'NSW', 'VIC', 'SA', 'WA', 'TAS', 'NT', 'ACT'];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private claimsService: ClaimsService,
               private policiesService: PoliciesService,
               private dialog: MatDialog,
@@ -112,14 +113,14 @@ export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
         this.submitting = true;
-        this.claimsService.lodge(this.buildClaim()).subscribe(
-          claim => {
+        this.claimsService.lodge(this.buildClaim()).subscribe({
+          next: claim => {
             this.submitting = false;
             this.lodgedClaimNumber = claim.claimNumber;
             this.router.navigate(['/claims', claim.claimNumber]);
           },
-          () => this.submitting = false
-        );
+          error: () => this.submitting = false
+        });
       }
     });
   }

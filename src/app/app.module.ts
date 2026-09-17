@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,16 +23,11 @@ import { SessionTimeoutDialogComponent } from './core/components/session-timeout
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    // Still required by LegacyDocumentService until the document store migration lands (SUNCL-2291)
-    HttpModule,
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
     SharedModule,
     AppRoutingModule
-  ],
-  entryComponents: [
-    SessionTimeoutDialogComponent
   ],
   bootstrap: [AppComponent]
 })

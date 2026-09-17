@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { SmashRepairerService, SmashRepairer } from '../../services/smash-repairer.service';
 
@@ -10,7 +10,7 @@ import { SmashRepairerService, SmashRepairer } from '../../services/smash-repair
 export class SettlementStepComponent implements OnInit {
 
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   @Input()
   postcode: string;
@@ -21,20 +21,20 @@ export class SettlementStepComponent implements OnInit {
   constructor(private smashRepairerService: SmashRepairerService) {
   }
 
+  get isCashSettlement(): boolean {
+    return this.form.get('method').value === 'CASH_SETTLEMENT';
+  }
+
   ngOnInit(): void {
     if (this.postcode) {
       this.loadingRepairers = true;
-      this.smashRepairerService.findNearby(this.postcode).subscribe(
-        repairers => {
+      this.smashRepairerService.findNearby(this.postcode).subscribe({
+        next: repairers => {
           this.repairers = repairers;
           this.loadingRepairers = false;
         },
-        () => this.loadingRepairers = false
-      );
+        error: () => this.loadingRepairers = false
+      });
     }
-  }
-
-  get isCashSettlement(): boolean {
-    return this.form.get('method').value === 'CASH_SETTLEMENT';
   }
 }

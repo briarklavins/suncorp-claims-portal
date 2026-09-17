@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+
 import { Observable } from 'rxjs';
 
 export interface ClaimInProgress {
@@ -7,7 +7,7 @@ export interface ClaimInProgress {
 }
 
 @Injectable()
-export class UnsavedClaimGuard implements CanDeactivate<ClaimInProgress> {
+export class UnsavedClaimGuard  {
 
   canDeactivate(component: ClaimInProgress): Observable<boolean> | Promise<boolean> | boolean {
     if (!component.hasUnsavedChanges()) {

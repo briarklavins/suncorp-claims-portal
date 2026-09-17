@@ -25,8 +25,8 @@ describe('ClaimsService', () => {
       ]
     });
 
-    service = TestBed.get(ClaimsService);
-    httpMock = TestBed.get(HttpTestingController);
+    service = TestBed.inject(ClaimsService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => httpMock.verify());
@@ -45,6 +45,48 @@ describe('ClaimsService', () => {
 
     httpMock.expectOne(environment.claimsApiBaseUrl + '/claims').flush(hailClaim());
     expect(loggingServiceStub.audit).toHaveBeenCalledWith('CLAIM_LODGED', 'CLM0000123456');
+  });
+
+  it('should fetch a single claim by claim number', () => {
+    service.findByClaimNumber('CLM0000123456').subscribe(claim => expect(claim.policyNumber).toBe('1400000001'));
+
+    httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456').flush(hailClaim());
+  });
+
+  it('should fetch the claims held against a policy', () => {
+    service.findByPolicyNumber('1400000001').subscribe(claims => expect(claims.length).toBe(1));
+
+    const request = httpMock.expectOne(req => req.url === environment.claimsApiBaseUrl + '/claims');
+    expect(request.request.params.get('policyNumber')).toBe('1400000001');
+    request.flush([hailClaim()]);
+  });
+
+  it('should patch a claim status', () => {
+    service.updateStatus('CLM0000123456', 'UNDER_ASSESSMENT').subscribe();
+
+    const request = httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456');
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body.status).toBe('UNDER_ASSESSMENT');
+    request.flush(hailClaim());
+  });
+
+  it('should resolve a claim snapshot for the print view', async () => {
+    const snapshot = service.getClaimSnapshot('CLM0000123456');
+
+    httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456').flush(hailClaim());
+
+    expect((await snapshot).claimNumber).toBe('CLM0000123456');
+  });
+
+  it('should log and rethrow a failed claim search', () => {
+    let failed = false;
+    service.findRecentClaims(10).subscribe({ error: () => failed = true });
+
+    httpMock.expectOne(req => req.url === environment.claimsApiBaseUrl + '/claims')
+      .flush('boom', { status: 500, statusText: 'Server Error' });
+
+    expect(failed).toBe(true);
+    expect(loggingServiceStub.error).toHaveBeenCalled();
   });
 
   function hailClaim(): Claim {

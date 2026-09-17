@@ -1,32 +1,43 @@
-import { browser, by, element, ElementFinder } from 'protractor';
+import { Locator, Page } from '@playwright/test';
 
 export class ClaimLodgementPage {
 
-  navigateTo(): Promise<any> {
-    return browser.get('/claims/lodge') as Promise<any>;
+  constructor(private readonly page: Page) {
   }
 
-  policyNumberField(): ElementFinder {
-    return element(by.css('input[formcontrolname="policyNumber"]'));
+  async navigateTo(): Promise<void> {
+    await this.page.goto('/claims/lodge');
   }
 
-  findPolicyButton(): ElementFinder {
-    return element(by.buttonText('Find policy'));
+  policyNumberField(): Locator {
+    return this.page.locator('input[formcontrolname="policyNumber"]');
   }
 
-  claimTypeSelect(): ElementFinder {
-    return element(by.css('mat-select[formcontrolname="claimType"]'));
+  findPolicyButton(): Locator {
+    return this.page.getByRole('button', { name: 'Find policy' });
   }
 
-  descriptionField(): ElementFinder {
-    return element(by.css('textarea[formcontrolname="description"]'));
+  policyNumberError(): Locator {
+    return this.page.locator('mat-error');
   }
 
-  lodgeButton(): ElementFinder {
-    return element(by.buttonText('Lodge claim'));
+  selectedStepLabel(): Locator {
+    return this.page.locator('.mat-step-header[aria-selected="true"] .mat-step-text-label');
   }
 
-  pageHeading(): Promise<string> {
-    return element(by.css('h1')).getText() as Promise<string>;
+  claimTypeSelect(): Locator {
+    return this.page.locator('mat-select[formcontrolname="claimType"]');
+  }
+
+  descriptionField(): Locator {
+    return this.page.locator('textarea[formcontrolname="description"]');
+  }
+
+  lodgeButton(): Locator {
+    return this.page.getByRole('button', { name: 'Lodge claim' });
+  }
+
+  pageHeading(): Locator {
+    return this.page.locator('h1');
   }
 }

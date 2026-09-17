@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
@@ -14,7 +14,6 @@ import { Brand } from './shared/models/brand.model';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  // No static flag - relies on the Angular 8 default resolution behaviour
   @ViewChild(MatSidenav)
   sidenav: MatSidenav;
 
@@ -34,10 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.brand = this.brandThemeService.applyBrandFromHost();
 
     this.subscriptions.add(
-      this.authService.currentUser$.subscribe(
-        user => this.consultantName = user ? user.displayName : null,
-        error => console.error('Unable to resolve the signed in consultant', error)
-      )
+      this.authService.currentUser$.subscribe({
+        next: user => this.consultantName = user ? user.displayName : null,
+        error: error => console.error('Unable to resolve the signed in consultant', error)
+      })
     );
 
     this.sessionTimeoutService.start();
