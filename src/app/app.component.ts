@@ -33,10 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.brand = this.brandThemeService.applyBrandFromHost();
 
     this.subscriptions.add(
-      this.authService.currentUser$.subscribe(
-        user => this.consultantName = user ? user.displayName : null,
-        error => console.error('Unable to resolve the signed in consultant', error)
-      )
+      this.authService.currentUser$.subscribe({
+        next: user => this.consultantName = user ? user.displayName : null,
+        error: error => console.error('Unable to resolve the signed in consultant', error)
+      })
     );
 
     this.sessionTimeoutService.start();

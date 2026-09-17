@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
@@ -13,7 +13,7 @@ describe('PolicyLookupComponent', () => {
   let component: PolicyLookupComponent;
   const policiesService = jasmine.createSpyObj<PoliciesService>('PoliciesService', ['findByPolicyNumber', 'findByCustomer']);
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [SharedModule, RouterTestingModule, NoopAnimationsModule],
       declarations: [PolicyLookupComponent],

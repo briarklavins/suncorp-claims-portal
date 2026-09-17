@@ -113,14 +113,14 @@ export class ClaimLodgementComponent implements OnInit, ClaimInProgress {
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
         this.submitting = true;
-        this.claimsService.lodge(this.buildClaim()).subscribe(
-          claim => {
+        this.claimsService.lodge(this.buildClaim()).subscribe({
+          next: claim => {
             this.submitting = false;
             this.lodgedClaimNumber = claim.claimNumber;
             this.router.navigate(['/claims', claim.claimNumber]);
           },
-          () => this.submitting = false
-        );
+          error: () => this.submitting = false
+        });
       }
     });
   }

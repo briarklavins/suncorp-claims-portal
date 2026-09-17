@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of, throwError } from 'rxjs';
@@ -21,7 +21,7 @@ describe('DashboardComponent', () => {
     { claimNumber: 'CLM3', policyNumber: '1400000003', status: 'UNDER_ASSESSMENT', lodgedAt: new Date(), incident: { claimType: 'HOME_STORM' } }
   ];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [SharedModule, RouterTestingModule],
       declarations: [DashboardComponent],
