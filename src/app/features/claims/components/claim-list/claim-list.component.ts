@@ -22,8 +22,15 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
+  // The sortable table sits behind *ngIf="!loading", so MatSort is created after ngAfterViewInit.
   @ViewChild(MatSort, { static: false })
-  sort: MatSort;
+  set sort(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
+
+  get sort(): MatSort {
+    return this.dataSource.sort;
+  }
 
   constructor(private claimsService: ClaimsService) {
   }
@@ -44,6 +51,5 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 }

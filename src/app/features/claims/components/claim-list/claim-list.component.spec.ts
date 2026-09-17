@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { asyncScheduler, scheduled } from 'rxjs';
 
 import { ClaimListComponent } from './claim-list.component';
 import { ClaimsService } from '../../services/claims.service';
@@ -20,22 +20,28 @@ describe('ClaimListComponent', () => {
       imports: [SharedModule, RouterTestingModule, NoopAnimationsModule],
       declarations: [ClaimListComponent],
       providers: [
-        { provide: ClaimsService, useValue: { findRecentClaims: () => of(claims) } }
+        // Claims arrive asynchronously, as they do from the claims API, so the sortable
+        // table (behind *ngIf="!loading") does not exist yet when the view initialises.
+        { provide: ClaimsService, useValue: { findRecentClaims: () => scheduled([claims], asyncScheduler) } }
       ]
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(ClaimListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should wire the paginator and sort to the data source after the view initialises', () => {
-    expect(component.dataSource.paginator).toBeTruthy();
+    expect(component.loading).toBe(true);
     expect(component.dataSource.paginator).toBe(component.paginator);
-    expect(component.dataSource.sort).toBe(component.sort);
+    expect(component.dataSource.sort).toBeFalsy();
+    fixture.whenStable().then(() => fixture.detectChanges());
+  }));
+
+  it('should wire the paginator and sort to the data source once the claims render', () => {
     expect(component.loading).toBe(false);
+    expect(component.dataSource.paginator).toBe(component.paginator);
+    expect(component.dataSource.sort).toBeTruthy();
+    expect(component.dataSource.sort).toBe(component.sort);
   });
 
   it('should page the table to the paginator page size', () => {

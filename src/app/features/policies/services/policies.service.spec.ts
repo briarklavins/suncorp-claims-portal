@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DatePipe } from '@angular/common';
 
-import { PoliciesService } from './policies.service';
-import { Policy } from '../../../shared/models/policy.model';
+import { PoliciesService, parsePolicyDate } from './policies.service';
+import { Policy, PolicySummary } from '../../../shared/models/policy.model';
 import { environment } from '../../../../environments/environment';
 
 /**
@@ -32,16 +32,31 @@ describe('PoliciesService', () => {
 
     httpMock.expectOne(environment.policyApiBaseUrl + '/policies/1400000001').flush({
       policyNumber: '1400000001',
+      inceptionDate: '01/01/2025',
       expiryDate: '31/12/2025'
     });
 
     expect(received.policyNumber).toBe('1400000001');
-    expect(new DatePipe('en-AU').transform(new Date(2025, 11, 31), 'dd/MM/yyyy')).toBe('31/12/2025');
+    expect(received.inceptionDate).toEqual(new Date(2025, 0, 1));
+    expect(new DatePipe('en-AU').transform(received.expiryDate, 'dd/MM/yyyy')).toBe('31/12/2025');
+  });
+
+  it('should accept dd/MM/yyyy (java.util.Date) and ISO-8601 (java.time.LocalDate) wire formats', () => {
+    expect(parsePolicyDate('15/01/2025')).toEqual(new Date(2025, 0, 15));
+    expect(parsePolicyDate('2025-01-15')).toEqual(new Date('2025-01-15'));
+    expect(parsePolicyDate('2025-01-15T00:00:00.000+10:00')).toEqual(new Date('2025-01-15T00:00:00.000+10:00'));
+    expect(parsePolicyDate(null)).toBeNull();
+    expect(parsePolicyDate('')).toBeNull();
   });
 
   it('should list a customer\'s policies', () => {
-    service.findByCustomer('C123').subscribe(policies => expect(policies.length).toBe(2));
-    httpMock.expectOne(environment.policyApiBaseUrl + '/policies/customer/C123').flush([{}, {}]);
+    let received: PolicySummary[];
+    service.findByCustomer('C123').subscribe(policies => received = policies);
+    httpMock.expectOne(environment.policyApiBaseUrl + '/policies/customer/C123')
+      .flush([{ expiryDate: '31/12/2025' }, { expiryDate: null }]);
+    expect(received.length).toBe(2);
+    expect(received[0].expiryDate).toEqual(new Date(2025, 11, 31));
+    expect(received[1].expiryDate).toBeNull();
   });
 
   it('should page a brand and status search', () => {
