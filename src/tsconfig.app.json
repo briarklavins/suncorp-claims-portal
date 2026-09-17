@@ -9,7 +9,6 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "enableIvy": false,
     "fullTemplateTypeCheck": false,
     "strictInjectionParameters": false
   }
