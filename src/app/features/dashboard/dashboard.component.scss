@@ -26,3 +26,10 @@
   padding: 10px 8px;
   border-bottom: 1px solid #e4e8ec;
 }
+
+.sun-tile-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+}

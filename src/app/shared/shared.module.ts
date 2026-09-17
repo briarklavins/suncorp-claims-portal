@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -61,14 +60,12 @@ const MATERIAL_MODULES = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    FlexLayoutModule,
     ...MATERIAL_MODULES
   ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
     ...MATERIAL_MODULES,
     BrandHeaderComponent,
     LoadingSpinnerComponent,
