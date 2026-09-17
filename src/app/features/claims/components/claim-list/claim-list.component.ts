@@ -22,16 +22,8 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
 
-  sort: MatSort;
-
-  // The table lives inside *ngIf="!loading", so MatSort only exists once the claims have loaded.
   @ViewChild(MatSort)
-  set sortRef(sort: MatSort) {
-    this.sort = sort;
-    if (sort) {
-      this.dataSource.sort = sort;
-    }
-  }
+  sort: MatSort;
 
   constructor(private claimsService: ClaimsService) {
   }

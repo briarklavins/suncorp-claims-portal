@@ -25,8 +25,8 @@ describe('ClaimsService', () => {
       ]
     });
 
-    service = TestBed.get(ClaimsService);
-    httpMock = TestBed.get(HttpTestingController);
+    service = TestBed.inject(ClaimsService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => httpMock.verify());

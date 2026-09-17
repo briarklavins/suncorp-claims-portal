@@ -8,7 +8,7 @@
 
   <sun-loading-spinner [loading]="loading" message="Loading claims"></sun-loading-spinner>
 
-  <table mat-table [dataSource]="dataSource" matSort *ngIf="!loading" class="mat-elevation-z1">
+  <table mat-table [dataSource]="dataSource" matSort [hidden]="loading" class="mat-elevation-z1">
 
     <ng-container matColumnDef="claimNumber">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Claim</th>

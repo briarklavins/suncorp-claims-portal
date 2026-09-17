@@ -21,20 +21,20 @@ export class SettlementStepComponent implements OnInit {
   constructor(private smashRepairerService: SmashRepairerService) {
   }
 
+  get isCashSettlement(): boolean {
+    return this.form.get('method').value === 'CASH_SETTLEMENT';
+  }
+
   ngOnInit(): void {
     if (this.postcode) {
       this.loadingRepairers = true;
-      this.smashRepairerService.findNearby(this.postcode).subscribe(
-        repairers => {
+      this.smashRepairerService.findNearby(this.postcode).subscribe({
+        next: repairers => {
           this.repairers = repairers;
           this.loadingRepairers = false;
         },
-        () => this.loadingRepairers = false
-      );
+        error: () => this.loadingRepairers = false
+      });
     }
-  }
-
-  get isCashSettlement(): boolean {
-    return this.form.get('method').value === 'CASH_SETTLEMENT';
   }
 }
