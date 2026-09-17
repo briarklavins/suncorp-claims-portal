@@ -1,0 +1,46 @@
+<sun-loading-spinner [loading]="loading" message="Retrieving claim"></sun-loading-spinner>
+
+<div *ngIf="claim && !loading">
+
+  <h1>Claim {{ claim.claimNumber }}</h1>
+  <p class="sun-status">{{ claim.status | claimStatus }} &middot; updated {{ claim.lastUpdated | timeAgo }}</p>
+
+  <div class="sun-card">
+    <h2>Incident</h2>
+    <dl>
+      <dt>Type</dt><dd>{{ claim.incident.claimType }}</dd>
+      <dt>When</dt><dd>{{ claim.incident.incidentDate | date:'dd/MM/yyyy' }} at {{ claim.incident.incidentTime }}</dd>
+      <dt>Where</dt>
+      <dd>{{ claim.incident.incidentSuburb }} {{ claim.incident.incidentState }} {{ claim.incident.incidentPostcode }}</dd>
+      <dt>Description</dt><dd>{{ claim.incident.description }}</dd>
+      <dt>Police event number</dt><dd>{{ claim.incident.policeEventNumber || 'Not reported' }}</dd>
+    </dl>
+  </div>
+
+  <div class="sun-card">
+    <h2>Settlement</h2>
+    <dl>
+      <dt>Method</dt><dd>{{ claim.settlement.method }}</dd>
+      <dt>Excess</dt><dd>{{ claim.excess | auCurrency }}</dd>
+      <dt>Estimated settlement</dt><dd>{{ claim.estimatedSettlement | auCurrency }}</dd>
+      <dt *ngIf="claim.settlement.bsb">BSB</dt>
+      <dd *ngIf="claim.settlement.bsb">{{ claim.settlement.bsb | bsb }}</dd>
+    </dl>
+  </div>
+
+  <div class="sun-card">
+    <h2>Documents</h2>
+    <ul>
+      <li *ngFor="let document of documents">
+        <a [href]="documentLink(document)" target="_blank">{{ document.fileName }}</a>
+        ({{ document.category }})
+      </li>
+    </ul>
+    <p *ngIf="documents.length === 0">No documents have been attached to this claim.</p>
+  </div>
+
+  <button mat-stroked-button color="warn" (click)="withdraw()"
+          [disabled]="claim.status === 'SETTLED' || claim.status === 'WITHDRAWN'">
+    Withdraw claim
+  </button>
+</div>

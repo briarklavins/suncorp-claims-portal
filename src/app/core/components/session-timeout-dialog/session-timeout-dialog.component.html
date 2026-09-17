@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Your session is about to expire</h2>
+
+<mat-dialog-content>
+  <p>
+    You will be signed out in {{ data.remainingMinutes }} minutes because of inactivity.
+    Any claim details that have not been submitted will be lost.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="signOut()">Sign out</button>
+  <button mat-raised-button color="primary" (click)="keepWorking()">Keep working</button>
+</mat-dialog-actions>

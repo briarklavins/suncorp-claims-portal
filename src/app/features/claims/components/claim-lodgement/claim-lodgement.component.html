@@ -1,0 +1,72 @@
+<h1>Lodge a claim</h1>
+
+<mat-horizontal-stepper linear>
+
+  <mat-step [stepControl]="policyForm" label="Policy">
+    <form [formGroup]="policyForm" class="sun-card">
+      <mat-form-field>
+        <input matInput formControlName="policyNumber" placeholder="Policy number" sunAutofocus maxlength="10">
+        <mat-error *ngIf="policyForm.get('policyNumber').hasError('pattern')">
+          Enter the 10 digit policy number shown on the certificate of insurance
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="registration" placeholder="Vehicle registration" sunUppercaseRego maxlength="7">
+      </mat-form-field>
+
+      <div *ngIf="policy" class="sun-policy-summary">
+        <p><strong>{{ policy.productType }}</strong> &middot; {{ policy.riskState }} {{ policy.riskPostcode }}</p>
+        <p>Expires {{ policy.expiryDate | date:'dd/MM/yyyy' }} &middot; premium {{ policy.totalPremium | auCurrency }}</p>
+      </div>
+
+      <button mat-raised-button color="primary" type="button" (click)="lookupPolicy()">Find policy</button>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="incidentForm" label="Incident">
+    <sun-incident-details-step [form]="incidentForm" [states]="states"></sun-incident-details-step>
+    <div class="sun-step-actions">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" matStepperNext [disabled]="incidentForm.invalid">Continue</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Photos and documents">
+    <sun-document-upload [claimNumber]="lodgedClaimNumber"></sun-document-upload>
+    <div class="sun-step-actions">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" matStepperNext>Continue</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="settlementForm" label="Settlement">
+    <sun-settlement-step [form]="settlementForm" [postcode]="incidentForm.value.incidentPostcode"></sun-settlement-step>
+    <div class="sun-step-actions">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" matStepperNext [disabled]="settlementForm.invalid">Continue</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="declarationForm" label="Declaration">
+    <form [formGroup]="declarationForm" class="sun-card">
+      <mat-checkbox formControlName="declarationAccepted">
+        I declare the information provided is true and correct. Giving false information may result in the claim
+        being declined under the Insurance Contracts Act 1984.
+      </mat-checkbox>
+      <mat-checkbox formControlName="privacyAccepted">
+        I have read the Suncorp Group Privacy Policy and consent to my information being shared with assessors,
+        repairers and investigators.
+      </mat-checkbox>
+    </form>
+
+    <div class="sun-step-actions">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" (click)="submit()"
+              [disabled]="declarationForm.invalid || submitting">
+        Lodge claim
+      </button>
+    </div>
+  </mat-step>
+
+</mat-horizontal-stepper>

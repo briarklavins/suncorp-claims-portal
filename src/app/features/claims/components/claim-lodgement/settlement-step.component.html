@@ -1,0 +1,34 @@
+<form [formGroup]="form" class="sun-card">
+
+  <mat-radio-group formControlName="method" class="sun-radio-group">
+    <mat-radio-button value="REPAIR">Repair through a Suncorp preferred repairer</mat-radio-button>
+    <mat-radio-button value="CASH_SETTLEMENT">Cash settlement</mat-radio-button>
+    <mat-radio-button value="REPLACEMENT">Replacement</mat-radio-button>
+  </mat-radio-group>
+
+  <div *ngIf="form.get('method').value === 'REPAIR'">
+    <sun-loading-spinner [loading]="loadingRepairers" message="Finding repairers near the customer"></sun-loading-spinner>
+    <mat-form-field *ngIf="!loadingRepairers">
+      <mat-select formControlName="preferredRepairerId" placeholder="Preferred repairer">
+        <mat-option *ngFor="let repairer of repairers" [value]="repairer.repairerId">
+          {{ repairer.tradingName }} - {{ repairer.suburb }} {{ repairer.state }}
+          (next available {{ repairer.nextAvailableDate | date:'dd/MM/yyyy' }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="isCashSettlement">
+    <mat-form-field>
+      <input matInput formControlName="accountName" placeholder="Account name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="bsb" placeholder="BSB (e.g. 484-799)" maxlength="7">
+      <mat-error *ngIf="form.get('bsb').hasError('pattern')">Enter a valid 6 digit BSB</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="accountNumber" placeholder="Account number">
+    </mat-form-field>
+  </div>
+
+</form>

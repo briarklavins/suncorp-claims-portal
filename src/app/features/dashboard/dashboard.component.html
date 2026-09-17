@@ -1,0 +1,47 @@
+<h1>{{ brandName }} claims dashboard</h1>
+
+<div class="sun-card" fxLayout="row wrap" fxLayoutGap="24px">
+  <div class="sun-tile">
+    <span class="sun-tile-value">{{ countByStatus('LODGED') }}</span>
+    <span class="sun-tile-label">Lodged today</span>
+  </div>
+  <div class="sun-tile">
+    <span class="sun-tile-value">{{ countByStatus('UNDER_ASSESSMENT') }}</span>
+    <span class="sun-tile-label">Under assessment</span>
+  </div>
+  <div class="sun-tile">
+    <span class="sun-tile-value">{{ countByStatus('ASSESSOR_BOOKED') }}</span>
+    <span class="sun-tile-label">Assessor booked</span>
+  </div>
+</div>
+
+<div class="sun-card">
+  <h2>Recent claims</h2>
+
+  <sun-loading-spinner [loading]="loading" message="Retrieving recent claims"></sun-loading-spinner>
+
+  <table *ngIf="!loading" class="sun-table" aria-label="Recent claims">
+    <thead>
+      <tr>
+        <th scope="col">Claim</th>
+        <th scope="col">Policy</th>
+        <th scope="col">Type</th>
+        <th scope="col">Status</th>
+        <th scope="col">Lodged</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let claim of recentClaims">
+        <td><a [routerLink]="['/claims', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+        <td>{{ claim.policyNumber }}</td>
+        <td>{{ claim.incident.claimType }}</td>
+        <td>{{ claim.status | claimStatus }}</td>
+        <td>{{ claim.lodgedAt | timeAgo }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && recentClaims.length === 0">No claims have been lodged from this site today.</p>
+</div>
+
+<button mat-raised-button color="primary" routerLink="/claims/lodge">Lodge a new claim</button>

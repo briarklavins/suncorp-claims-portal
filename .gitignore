@@ -1,0 +1,10 @@
+node_modules/
+dist/
+out-tsc/
+coverage/
+test-results/
+.sass-cache/
+.angular/
+*.log
+.idea/
+.vscode/

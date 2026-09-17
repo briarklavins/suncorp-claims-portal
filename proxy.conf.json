@@ -1,0 +1,13 @@
+{
+  "/policy-admin": {
+    "target": "https://api-dev.suncorp.internal",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/claims-api": {
+    "target": "https://api-dev.suncorp.internal",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

@@ -1,0 +1,14 @@
+// AAMI brand palette
+$aami-primary: #e4002b;
+$aami-secondary: #1a1a1a;
+
+.sun-brand-aami {
+  --brand-primary: #{$aami-primary};
+  --brand-secondary: #{$aami-secondary};
+}
+
+.sun-brand-header {
+  background-color: $aami-primary;
+  color: #ffffff;
+  padding: 12px 24px;
+}

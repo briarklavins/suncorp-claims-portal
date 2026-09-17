@@ -1,0 +1,49 @@
+<h1>Policy lookup</h1>
+
+<form [formGroup]="form" class="sun-card" (ngSubmit)="search()">
+  <mat-radio-group formControlName="searchType">
+    <mat-radio-button value="POLICY_NUMBER">Policy number</mat-radio-button>
+    <mat-radio-button value="CUSTOMER_ID">Customer Master ID</mat-radio-button>
+  </mat-radio-group>
+
+  <mat-form-field>
+    <input matInput formControlName="searchValue" placeholder="Search value" sunAutofocus>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || searching">Search</button>
+</form>
+
+<sun-loading-spinner [loading]="searching" message="Searching the policy register"></sun-loading-spinner>
+
+<div class="sun-card" *ngIf="policy">
+  <h2>{{ policy.policyNumber }}</h2>
+  <dl>
+    <dt>Product</dt><dd>{{ policy.productType }}</dd>
+    <dt>Status</dt><dd>{{ policy.status }}</dd>
+    <dt>Risk address</dt><dd>{{ policy.riskState }} {{ policy.riskPostcode }}</dd>
+    <dt>Period</dt>
+    <dd>{{ policy.inceptionDate | date:'dd/MM/yyyy' }} to {{ policy.expiryDate | date:'dd/MM/yyyy' }}</dd>
+    <dt>Total premium</dt><dd>{{ policy.totalPremium | auCurrency }}</dd>
+  </dl>
+
+  <h3>Cover</h3>
+  <ul>
+    <li *ngFor="let coverage of policy.coverages">
+      {{ coverage.coverageCode }} - sum insured {{ coverage.sumInsured | auCurrency:false }},
+      excess {{ coverage.excess | auCurrency:false }}
+    </li>
+  </ul>
+
+  <button mat-raised-button color="primary" [routerLink]="['/claims/lodge']">Lodge a claim on this policy</button>
+</div>
+
+<div class="sun-card" *ngIf="customerPolicies.length > 0">
+  <h2>Policies held</h2>
+  <ul>
+    <li *ngFor="let summary of customerPolicies">
+      {{ summary.policyNumber }} - {{ summary.brandName }} {{ summary.productType }} ({{ summary.status }})
+    </li>
+  </ul>
+</div>
+
+<p *ngIf="notFound">No policy was found for that search.</p>

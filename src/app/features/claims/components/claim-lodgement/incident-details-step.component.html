@@ -1,0 +1,50 @@
+<form [formGroup]="form" class="sun-card">
+
+  <mat-form-field>
+    <mat-select formControlName="claimType" placeholder="What happened?">
+      <mat-option *ngFor="let type of claimTypes" [value]="type.value">{{ type.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="incidentPicker" formControlName="incidentDate" placeholder="Date of incident">
+    <mat-datepicker-toggle matSuffix [for]="incidentPicker"></mat-datepicker-toggle>
+    <mat-datepicker #incidentPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="incidentTime" placeholder="Approximate time (24 hour, e.g. 16:45)">
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput formControlName="description" rows="4"
+              placeholder="Describe what happened in the customer's words"></textarea>
+    <mat-hint align="end">{{ form.get('description').value?.length || 0 }} / 2000</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="incidentSuburb" placeholder="Suburb">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select formControlName="incidentState" placeholder="State">
+      <mat-option *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="incidentPostcode" placeholder="Postcode" maxlength="4">
+    <mat-error *ngIf="form.get('incidentPostcode').hasError('pattern')">Enter a 4 digit Australian postcode</mat-error>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="policeReported">The incident was reported to police</mat-checkbox>
+
+  <mat-form-field *ngIf="form.get('policeReported').value">
+    <input matInput formControlName="policeEventNumber" placeholder="Police event number">
+  </mat-form-field>
+
+  <mat-checkbox formControlName="thirdPartyInvolved">Another vehicle or property was involved</mat-checkbox>
+
+  <mat-checkbox *ngIf="isMotorClaim" formControlName="driveable">The vehicle is still driveable</mat-checkbox>
+
+</form>

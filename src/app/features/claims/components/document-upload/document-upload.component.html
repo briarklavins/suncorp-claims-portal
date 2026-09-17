@@ -1,0 +1,22 @@
+<div class="sun-card">
+  <h2>Photos and documents</h2>
+  <p>
+    Attach photos of the damage, any repair quotes and the police report if one was obtained.
+    JPG, PNG, HEIC or PDF up to 10MB each.
+  </p>
+
+  <input #fileInput type="file" multiple hidden
+         accept="image/jpeg,image/png,image/heic,application/pdf"
+         (change)="onFilesSelected($event)">
+
+  <button mat-stroked-button color="primary" (click)="browse()" [disabled]="uploading">Attach files</button>
+
+  <mat-progress-spinner *ngIf="uploading" mode="determinate" [value]="progress" diameter="36">
+  </mat-progress-spinner>
+
+  <p class="sun-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <ul>
+    <li *ngFor="let document of uploaded">{{ document.fileName }} ({{ document.category }})</li>
+  </ul>
+</div>

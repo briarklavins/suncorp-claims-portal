@@ -1,0 +1,28 @@
+<mat-sidenav-container class="sun-shell">
+
+  <mat-sidenav mode="side" opened="false" class="sun-nav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a mat-list-item routerLink="/claims" routerLinkActive="active">Claims</a>
+      <a mat-list-item routerLink="/claims/lodge" routerLinkActive="active">Lodge a claim</a>
+      <a mat-list-item routerLink="/policies/lookup" routerLinkActive="active">Policy lookup</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <sun-brand-header [brand]="brand" [consultantName]="consultantName" (menuToggled)="toggleSidenav()">
+    </sun-brand-header>
+
+    <main #mainContent tabindex="-1" class="sun-page">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="sun-footer">
+      <p>
+        Insurance issued by AAI Limited ABN 48 005 297 807 trading as {{ brand?.displayName }}.
+        Read the Product Disclosure Statement before making a decision about this insurance.
+      </p>
+    </footer>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
