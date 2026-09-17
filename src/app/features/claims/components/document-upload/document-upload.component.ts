@@ -10,6 +10,9 @@ import { ClaimDocument } from '../../../../shared/models/claim.model';
 })
 export class DocumentUploadComponent {
 
+  private static readonly MAX_BYTES = 10 * 1024 * 1024;
+  private static readonly ACCEPTED = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf'];
+
   @Input()
   claimNumber: string;
 
@@ -20,9 +23,6 @@ export class DocumentUploadComponent {
   progress = 0;
   uploading = false;
   errorMessage: string;
-
-  private static readonly MAX_BYTES = 10 * 1024 * 1024;
-  private static readonly ACCEPTED = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf'];
 
   constructor(private http: HttpClient) {
   }

@@ -19,7 +19,7 @@ export class LoggingService {
     this.http.post(environment.claimsApiBaseUrl + '/client-logs', {
       level: 'ERROR',
       application: 'claims-portal',
-      message: message,
+      message,
       detail: error ? String(error.message || error) : null,
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString()
@@ -28,8 +28,8 @@ export class LoggingService {
 
   audit(action: string, claimNumber: string): void {
     this.http.post(environment.claimsApiBaseUrl + '/audit', {
-      action: action,
-      claimNumber: claimNumber,
+      action,
+      claimNumber,
       timestamp: new Date().toISOString()
     }).subscribe();
   }

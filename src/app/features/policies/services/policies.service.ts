@@ -27,6 +27,6 @@ export class PoliciesService {
       .set('status', status)
       .set('page', String(page))
       .set('size', '25');
-    return this.http.get(this.baseUrl, { params: params });
+    return this.http.get(this.baseUrl, { params });
   }
 }

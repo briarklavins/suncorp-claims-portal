@@ -21,8 +21,8 @@ export class LegacyDocumentService {
   }
 
   listDocuments(claimNumber: string): Observable<ClaimDocument[]> {
-    const headers = new Headers({ 'Accept': 'application/json', 'X-Source-System': 'CLAIMS-PORTAL' });
-    const options = new RequestOptions({ headers: headers });
+    const headers = new Headers({ Accept: 'application/json', 'X-Source-System': 'CLAIMS-PORTAL' });
+    const options = new RequestOptions({ headers });
 
     return this.http.get(this.documentUrl + '?claimNumber=' + claimNumber, options)
       .map((response: Response) => {
