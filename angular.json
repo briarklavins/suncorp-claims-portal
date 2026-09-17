@@ -102,15 +102,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "suncorp-claims-portal:build",
-            "port": 4200
+            "port": 4200,
+            "buildTarget": "suncorp-claims-portal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "suncorp-claims-portal:build:production"
+              "buildTarget": "suncorp-claims-portal:build:production"
             },
             "aami": {
-              "browserTarget": "suncorp-claims-portal:build:aami"
+              "buildTarget": "suncorp-claims-portal:build:aami"
             }
           }
         },

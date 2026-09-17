@@ -11,22 +11,22 @@ The portal reads policy data from the
 
 | Component | Version | Notes |
 |---|---|---|
-| Angular | 8.2.14 | ViewEngine (`enableIvy: false`) |
-| Angular CLI | 8.3.25 | `@angular-devkit/build-angular` 0.803.x |
-| Angular Material / CDK | 8.2.x | deep `@angular/material` imports |
-| `@angular/http` | 7.2.16 | still used by `LegacyDocumentService` (FileNet) |
-| RxJS | 6.4 + `rxjs-compat` | patched operators in the legacy service |
-| TypeScript | 3.5.3 | `target: es5`, non-strict |
-| Node | 12.16.3 (`.nvmrc`) | Jenkins agent label `node-12` |
-| Lint | TSLint 5 + codelyzer 5 | |
-| Unit tests | Karma + Jasmine 3.4 | |
-| E2E | Protractor 5.4 | |
-| Styling | node-sass 4.12 | |
+| Angular | 17.3 | Ivy, standalone-ready NgModules, strict template type checking |
+| Angular CLI | 17.3 | `@angular-devkit/build-angular` 17.x |
+| Angular Material / CDK | 17.3 | secondary entry point imports (`@angular/material/dialog`, ...) |
+| HTTP | `HttpClient` | `LegacyDocumentService` unwraps the FileNet envelope with `map` |
+| RxJS | 7.5 | pipeable operators, observer-object `subscribe` |
+| TypeScript | 5.4 | `target: ES2020` |
+| Node | 20 (`.nvmrc`) | Jenkins agent label `node-20` |
+| Lint | ESLint + `@angular-eslint` 17 | |
+| Unit tests | Karma + Jasmine 5 | |
+| E2E | Playwright | `e2e/`, SiteMinder cookie + API mocks in `e2e/fixtures.ts` |
+| Styling | dart `sass` | Internet Explorer 11 is no longer supported |
 
 ## Running locally
 
 ```bash
-nvm use                 # Node 12.16.3
+nvm use                 # Node 20
 npm install
 npm start               # http://localhost:4200 with the dev API proxy
 npm run start:aami      # AAMI themed build
@@ -38,19 +38,18 @@ npm run e2e
 ## Key areas
 
 - `features/claims/components/claim-lodgement` - five step reactive-form lodgement wizard
-- `features/claims/services/legacy-document.service.ts` - `@angular/http` client for the FileNet store
+- `features/claims/services/legacy-document.service.ts` - `HttpClient` client for the FileNet store
 - `core/services/session-timeout.service.ts` - SEC-014 15 minute idle timeout
 - `core/services/brand-theme.service.ts` - host based brand theming
 - `shared/pipes` - AUD currency, BSB and claim status formatting
 
 ## Upgrade
 
-This repository is the "before" state for the Angular 8 -> 17 uplift.
-See [docs/UPGRADE-BLOCKERS.md](docs/UPGRADE-BLOCKERS.md) and [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md).
+This repository has been uplifted from Angular 8 / Node 12 to Angular 17 / Node 20, one major
+version per commit. The original blocker catalogue is kept for reference in [docs/UPGRADE-BLOCKERS.md](docs/UPGRADE-BLOCKERS.md) and [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md).
 
 ## Demo notes
 
 This is a synthetic sample repository built for an upgrade demonstration. It is not Suncorp code;
-brand names, product rules and endpoints are illustrative. No `package-lock.json` is committed, so
-run `npm install` once (on Node 12) to generate one before using the `npm ci` paths in the
-`Dockerfile` and `Jenkinsfile`.
+brand names, product rules and endpoints are illustrative. `package-lock.json` is committed, so the
+`npm ci` paths in the `Dockerfile` and `Jenkinsfile` work as-is.

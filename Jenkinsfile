@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'node-12' }
+    agent { label 'node-20' }
 
     environment {
         NPM_REGISTRY = 'https://artifactory.suncorp.com.au/artifactory/api/npm/npm-virtual'
