@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ClaimsService } from '../../services/claims.service';
@@ -16,7 +16,7 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
 
   displayedColumns = ['claimNumber', 'policyNumber', 'claimType', 'status', 'lodgedAt', 'actions'];
   dataSource = new MatTableDataSource<Claim>([]);
-  searchControl = new FormControl('');
+  searchControl = new UntypedFormControl('');
   loading = true;
 
   @ViewChild(MatPaginator)
