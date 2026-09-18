@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -10,17 +12,17 @@ import { Claim } from '../../../../shared/models/claim.model';
   selector: 'sun-claim-list',
   templateUrl: './claim-list.component.html'
 })
-export class ClaimListComponent implements OnInit {
+export class ClaimListComponent implements OnInit, AfterViewInit {
 
   displayedColumns = ['claimNumber', 'policyNumber', 'claimType', 'status', 'lodgedAt', 'actions'];
   dataSource = new MatTableDataSource<Claim>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: false })
   sort: MatSort;
 
   constructor(private claimsService: ClaimsService) {
@@ -30,8 +32,6 @@ export class ClaimListComponent implements OnInit {
     this.claimsService.findRecentClaims(100).subscribe(
       claims => {
         this.dataSource.data = claims;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
         this.loading = false;
       },
       () => this.loading = false
@@ -40,5 +40,10 @@ export class ClaimListComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(term => this.dataSource.filter = String(term).trim().toLowerCase());
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 }

@@ -4,8 +4,8 @@
   "description": "Digital claims lodgement portal for Suncorp Personal Insurance brands",
   "private": true,
   "engines": {
-    "node": ">=10.16.0 <13.0.0",
-    "npm": ">=6.9.0"
+    "node": ">=20.9.0 <21.0.0",
+    "npm": ">=10.0.0"
   },
   "scripts": {
     "ng": "ng",
@@ -13,7 +13,7 @@
     "start:aami": "ng serve --configuration=aami --proxy-config proxy.conf.json",
     "build": "ng build",
     "build:uat": "ng build --configuration=uat",
-    "build:prod": "ng build --prod --aot --build-optimizer",
+    "build:prod": "ng build --configuration production",
     "test": "ng test --watch=false --code-coverage",
     "test:watch": "ng test",
     "lint": "ng lint",
@@ -28,7 +28,6 @@
     "@angular/core": "8.2.14",
     "@angular/flex-layout": "8.0.0-beta.27",
     "@angular/forms": "8.2.14",
-    "@angular/http": "7.2.16",
     "@angular/material": "8.2.3",
     "@angular/platform-browser": "8.2.14",
     "@angular/platform-browser-dynamic": "8.2.14",

@@ -1,35 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { ClaimDocument } from '../../../shared/models/claim.model';
 
+export interface FileNetEnvelope {
+  FILENET_RESPONSE: {
+    DOCUMENTS: ClaimDocument[];
+  };
+}
+
 /**
- * Talks to the legacy FileNet document store, which returns a non standard
- * envelope that the newer HttpClient JSON handling cannot parse without a custom
- * decoder. Scheduled for retirement with SUNCL-2291.
+ * Talks to the legacy FileNet document store, which wraps its payload in a
+ * non standard envelope. Scheduled for retirement with SUNCL-2291.
  */
 @Injectable()
 export class LegacyDocumentService {
 
   private readonly documentUrl = environment.documentUploadUrl;
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
   }
 
   listDocuments(claimNumber: string): Observable<ClaimDocument[]> {
-    const headers = new Headers({ 'Accept': 'application/json', 'X-Source-System': 'CLAIMS-PORTAL' });
-    const options = new RequestOptions({ headers: headers });
+    const headers = new HttpHeaders({ Accept: 'application/json', 'X-Source-System': 'CLAIMS-PORTAL' });
 
-    return this.http.get(this.documentUrl + '?claimNumber=' + claimNumber, options)
-      .map((response: Response) => {
-        const envelope = response.json();
-        return envelope.FILENET_RESPONSE.DOCUMENTS as ClaimDocument[];
-      })
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<FileNetEnvelope>(this.documentUrl, { headers, params: { claimNumber } })
+      .pipe(
+        map(envelope => envelope.FILENET_RESPONSE.DOCUMENTS),
+        catchError((error: HttpErrorResponse) => throwError(error))
+      );
   }
 
   downloadUrl(documentId: string): string {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription, timer } from 'rxjs';
 
 import { SessionTimeoutDialogComponent } from '../components/session-timeout-dialog/session-timeout-dialog.component';

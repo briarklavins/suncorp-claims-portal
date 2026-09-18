@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 /**
  * Moves focus to the host element once the view initialises. Used on the first
@@ -8,14 +8,14 @@ import { Directive, ElementRef, Input, OnInit, Renderer } from '@angular/core';
 export class AutofocusDirective implements OnInit {
 
   @Input('sunAutofocus')
-  enabled = true;
+  enabled: boolean | string = true;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer) {
+  constructor(private elementRef: ElementRef<HTMLElement>) {
   }
 
   ngOnInit(): void {
-    if (this.enabled) {
-      this.renderer.invokeElementMethod(this.elementRef.nativeElement, 'focus', []);
+    if (this.enabled !== false) {
+      this.elementRef.nativeElement.focus();
     }
   }
 }

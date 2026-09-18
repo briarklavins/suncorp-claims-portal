@@ -13,8 +13,8 @@ export class DocumentUploadComponent {
   @Input()
   claimNumber: string;
 
-  @ViewChild('fileInput')
-  fileInput: ElementRef;
+  @ViewChild('fileInput', { static: true })
+  fileInput: ElementRef<HTMLInputElement>;
 
   uploaded: ClaimDocument[] = [];
   progress = 0;
