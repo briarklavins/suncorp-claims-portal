@@ -1,13 +1,23 @@
-.sun-brand-logo {
-  height: 28px;
+.sun-brand-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.sun-brand-title {
-  font-size: 18px;
-  font-weight: 600;
+.sun-brand-header-start,
+.sun-brand-header-end {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.sun-brand-phone {
-  font-size: 13px;
-  opacity: 0.85;
+.sun-brand-header-start {
+  gap: 12px;
 }
+
+.sun-brand-header-end {
+  justify-content: flex-end;
+  gap: 16px;
+}
+
