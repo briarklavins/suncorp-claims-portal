@@ -43,7 +43,8 @@ pipeline {
         stage('E2E') {
             when { branch 'develop' }
             steps {
-                sh 'npm run e2e'
+                sh 'npx playwright install --with-deps chromium'
+                sh 'CI=true npm run e2e'
             }
         }
     }

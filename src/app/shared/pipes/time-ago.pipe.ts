@@ -11,10 +11,10 @@ const UNITS: ReadonlyArray<[Unit, number]> = [
 ];
 
 /**
- * Renders a date relative to now ("2 hours ago", "in 3 days"). Pure: callers pass
- * `now` when the reference time needs to move (the default is the current time).
+ * Renders a date relative to now ("2 hours ago", "in 3 days"). Impure so long-lived
+ * views (dashboard, claim detail) keep ticking as wall time advances.
  */
-@Pipe({ name: 'timeAgo' })
+@Pipe({ name: 'timeAgo', pure: false })
 export class TimeAgoPipe implements PipeTransform {
 
   private readonly formatter = new Intl.RelativeTimeFormat('en-AU', { numeric: 'auto' });

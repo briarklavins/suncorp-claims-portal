@@ -32,6 +32,7 @@ npm start               # http://localhost:4200 with the dev API proxy
 npm run start:aami      # AAMI themed build
 npm test
 npm run lint
+npx playwright install chromium   # once per machine
 npm run e2e
 ```
 
