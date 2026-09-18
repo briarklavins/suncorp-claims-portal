@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { Policy, PolicySummary } from '../../../shared/models/policy.model';
 import { parsePolicyDate } from '../../../shared/utils/policy-date';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PoliciesService {
 
   private readonly baseUrl = environment.policyApiBaseUrl + '/policies';

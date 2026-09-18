@@ -21,7 +21,8 @@ test.describe('Claim lodgement', () => {
     await page.getByRole('button', { name: 'Find policy' }).click();
 
     await expect(page.locator('mat-error')).toContainText('Enter the 10 digit policy number');
-    await expect(page.locator('mat-select[formcontrolname="claimType"]')).toHaveCount(0);
+    await expect(page.locator('.sun-policy-summary')).toHaveCount(0);
+    await expect(page.getByRole('tab', { name: 'Policy' })).toHaveAttribute('aria-selected', 'true');
   });
 
   test('should lodge a claim through the five-step wizard', async ({ page }) => {
@@ -39,7 +40,8 @@ test.describe('Claim lodgement', () => {
     // Step 2 - incident
     await page.locator('mat-select[formcontrolname="claimType"]').click();
     await page.getByRole('option', { name: 'Motor - collision' }).click();
-    await page.locator('input[formcontrolname="incidentDate"]').fill('15/05/2026');
+    await page.locator('input[formcontrolname="incidentDate"]').fill('2026-05-15');
+    await page.locator('input[formcontrolname="incidentDate"]').blur();
     await page.locator('input[formcontrolname="incidentTime"]').fill('16:45');
     await page.locator('textarea[formcontrolname="description"]').fill('Rear ended at traffic lights on Coronation Drive.');
     await page.locator('input[formcontrolname="incidentSuburb"]').fill('Toowong');

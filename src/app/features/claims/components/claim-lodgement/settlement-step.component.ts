@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 import { SmashRepairerService, SmashRepairer } from '../../services/smash-repairer.service';
@@ -7,7 +7,7 @@ import { SmashRepairerService, SmashRepairer } from '../../services/smash-repair
   selector: 'sun-settlement-step',
   templateUrl: './settlement-step.component.html'
 })
-export class SettlementStepComponent implements OnInit {
+export class SettlementStepComponent implements OnChanges {
 
   @Input()
   form: UntypedFormGroup;
@@ -21,8 +21,8 @@ export class SettlementStepComponent implements OnInit {
   constructor(private smashRepairerService: SmashRepairerService) {
   }
 
-  ngOnInit(): void {
-    if (this.postcode) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['postcode'] && /^[0-9]{4}$/.test(this.postcode || '')) {
       this.loadingRepairers = true;
       this.smashRepairerService.findNearby(this.postcode).subscribe({
         next: repairers => {

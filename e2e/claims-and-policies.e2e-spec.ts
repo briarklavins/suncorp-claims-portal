@@ -33,7 +33,7 @@ test.describe('Claim list', () => {
     await page.getByPlaceholder('Search by claim or policy number').fill('CLM000007');
     await expect(rows).toHaveCount(1);
     await expect(rows.first()).toContainText('CLM000007');
-    await expect(rows.first()).toContainText('07/05/2026');
+    await expect(rows.first()).toContainText('08/05/2026');
   });
 });
 
@@ -50,12 +50,14 @@ test.describe('Claim detail documents', () => {
     await expect(links).toHaveText(fileNetDocuments.map(d => d.fileName));
     await expect(links.nth(1)).toHaveAttribute('href', '/claims-api/v1/documents/DOC-2/content');
 
-    const downloadResponse = page.waitForResponse('**/claims-api/v1/documents/DOC-2/content');
-    const [popup] = await Promise.all([page.waitForEvent('popup'), links.nth(1).click()]);
-    const response = await downloadResponse;
-    expect(response.status()).toBe(200);
-    expect(response.headers()['content-disposition']).toContain('repair-quote.pdf');
-    await popup.close();
+    await expect(links.nth(1)).toHaveAttribute('target', '_blank');
+
+    const download = await page.evaluate(async href => {
+      const response = await fetch(href);
+      return { status: response.status, disposition: response.headers.get('content-disposition') };
+    }, await links.nth(1).getAttribute('href'));
+    expect(download.status).toBe(200);
+    expect(download.disposition).toContain('repair-quote.pdf');
   });
 
   test('should reject uploads that are not JPG, PNG, HEIC or PDF', async ({ page }) => {

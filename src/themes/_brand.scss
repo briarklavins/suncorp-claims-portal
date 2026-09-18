@@ -12,11 +12,13 @@ $header-padding: 12px 24px;
     @if $accent {
       --brand-accent: #{$accent};
     }
+  }
 
-    .sun-brand-header {
-      background-color: $header-background;
-      color: $header-text;
-      padding: $header-padding;
-    }
+  // The header colour is global for the build so hosts without a dedicated
+  // theme file (GIO, Apia, Shannons, Bingle) inherit the bundled brand header.
+  .sun-brand-header {
+    background-color: $header-background;
+    color: $header-text;
+    padding: $header-padding;
   }
 }

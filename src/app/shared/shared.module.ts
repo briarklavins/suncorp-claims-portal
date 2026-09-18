@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, registerLocaleData } from '@angular/common';
+import localeEnAu from '@angular/common/locales/en-AU';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,6 +35,8 @@ import { ClaimStatusPipe } from './pipes/claim-status.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { UppercaseRegoDirective } from './directives/uppercase-rego.directive';
+
+registerLocaleData(localeEnAu);
 
 const MATERIAL_MODULES = [
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
@@ -76,6 +79,7 @@ const MATERIAL_MODULES = [
     TimeAgoPipe,
     AutofocusDirective,
     UppercaseRegoDirective
-  ]
+  ],
+  providers: [CurrencyPipe]
 })
 export class SharedModule { }

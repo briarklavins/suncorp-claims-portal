@@ -23,7 +23,9 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
   paginator: MatPaginator;
 
   @ViewChild(MatSort, { static: false })
-  sort: MatSort;
+  set sort(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
 
   constructor(private claimsService: ClaimsService) {
   }
@@ -44,6 +46,5 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 }
