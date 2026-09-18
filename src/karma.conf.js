@@ -6,22 +6,29 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('karma-junit-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false
     },
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: require('path').join(__dirname, '../coverage'),
-      reports: ['html', 'lcovonly', 'cobertura'],
-      fixWebpackSourcePaths: true,
-      thresholds: {
-        statements: 70,
-        branches: 60,
-        functions: 70,
-        lines: 70
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'lcovonly' },
+        { type: 'cobertura' },
+        { type: 'text-summary' }
+      ],
+      check: {
+        global: {
+          statements: 70,
+          branches: 60,
+          functions: 70,
+          lines: 70
+        }
       }
     },
     junitReporter: {
