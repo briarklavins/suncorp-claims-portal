@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { Policy, PolicySummary } from '../../../shared/models/policy.model';
+import { parsePolicyDate } from '../../../shared/utils/policy-date';
 
 @Injectable()
 export class PoliciesService {
@@ -14,14 +16,22 @@ export class PoliciesService {
   }
 
   findByPolicyNumber(policyNumber: string): Observable<Policy> {
-    return this.http.get<Policy>(this.baseUrl + '/' + policyNumber);
+    return this.http.get<Policy>(this.baseUrl + '/' + policyNumber).pipe(
+      map(policy => ({
+        ...policy,
+        inceptionDate: parsePolicyDate(policy.inceptionDate),
+        expiryDate: parsePolicyDate(policy.expiryDate)
+      }))
+    );
   }
 
   findByCustomer(customerMasterId: string): Observable<PolicySummary[]> {
-    return this.http.get<PolicySummary[]>(this.baseUrl + '/customer/' + customerMasterId);
+    return this.http.get<PolicySummary[]>(this.baseUrl + '/customer/' + customerMasterId).pipe(
+      map(policies => policies.map(summary => ({ ...summary, expiryDate: parsePolicyDate(summary.expiryDate) })))
+    );
   }
 
-  search(brandCode: string, status: string, page: number = 0): Observable<any> {
+  search(brandCode: string, status: string, page: number = 0): Observable<unknown> {
     const params = new HttpParams()
       .set('brand', brandCode)
       .set('status', status)

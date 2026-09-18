@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { ClaimsService } from './claims.service';
 import { LoggingService } from '../../../core/services/logging.service';
@@ -29,7 +30,11 @@ describe('ClaimsService', () => {
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => httpMock.verify());
+  afterEach(() => {
+    httpMock.verify();
+    loggingServiceStub.error.calls.reset();
+    loggingServiceStub.audit.calls.reset();
+  });
 
   it('should request recent claims sorted by lodgement date', () => {
     service.findRecentClaims(10).subscribe(claims => expect(claims.length).toBe(1));
@@ -45,6 +50,51 @@ describe('ClaimsService', () => {
 
     httpMock.expectOne(environment.claimsApiBaseUrl + '/claims').flush(hailClaim());
     expect(loggingServiceStub.audit).toHaveBeenCalledWith('CLAIM_LODGED', 'CLM0000123456');
+  });
+
+  it('should retrieve a claim by number', () => {
+    let claim: Claim;
+    service.findByClaimNumber('CLM0000123456').subscribe(result => claim = result);
+
+    httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456').flush(hailClaim());
+    expect(claim.incident.claimType).toBe('MOTOR_HAIL');
+  });
+
+  it('should retrieve claims for a policy', () => {
+    service.findByPolicyNumber('1400000001').subscribe(claims => expect(claims.length).toBe(1));
+
+    const request = httpMock.expectOne(req =>
+      req.url === environment.claimsApiBaseUrl + '/claims' && req.params.get('policyNumber') === '1400000001');
+    request.flush([hailClaim()]);
+  });
+
+  it('should patch the claim status', () => {
+    let claim: Claim;
+    service.updateStatus('CLM0000123456', 'WITHDRAWN').subscribe(result => claim = result);
+
+    const request = httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456');
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ status: 'WITHDRAWN' });
+    request.flush({ ...hailClaim(), status: 'WITHDRAWN' });
+    expect(claim.status).toBe('WITHDRAWN');
+  });
+
+  it('should resolve a claim snapshot as a promise', async () => {
+    const snapshot = service.getClaimSnapshot('CLM0000123456');
+    httpMock.expectOne(environment.claimsApiBaseUrl + '/claims/CLM0000123456').flush(hailClaim());
+    expect((await snapshot).claimNumber).toBe('CLM0000123456');
+  });
+
+  it('should log and rethrow API failures', () => {
+    let error: HttpErrorResponse;
+    service.findRecentClaims(10).subscribe({ error: e => error = e });
+
+    httpMock.expectOne(req => req.url === environment.claimsApiBaseUrl + '/claims')
+      .flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
+
+    expect(error.status).toBe(500);
+    expect(loggingServiceStub.error).toHaveBeenCalledWith('Unable to retrieve recent claims', error);
+    expect(loggingServiceStub.audit).not.toHaveBeenCalled();
   });
 
   function hailClaim(): Claim {
