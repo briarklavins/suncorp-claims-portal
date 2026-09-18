@@ -35,28 +35,28 @@ export class PolicyLookupComponent {
     const value = this.form.value.searchValue;
 
     if (this.form.value.searchType === 'POLICY_NUMBER') {
-      this.policiesService.findByPolicyNumber(value).subscribe(
-        policy => {
+      this.policiesService.findByPolicyNumber(value).subscribe({
+        next: policy => {
           this.policy = policy;
           this.searching = false;
         },
-        () => {
+        error: () => {
           this.notFound = true;
           this.searching = false;
         }
-      );
+      });
     } else {
-      this.policiesService.findByCustomer(value).subscribe(
-        policies => {
+      this.policiesService.findByCustomer(value).subscribe({
+        next: policies => {
           this.customerPolicies = policies;
           this.notFound = policies.length === 0;
           this.searching = false;
         },
-        () => {
+        error: () => {
           this.notFound = true;
           this.searching = false;
         }
-      );
+      });
     }
   }
 }

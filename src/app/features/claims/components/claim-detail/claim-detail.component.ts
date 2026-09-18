@@ -26,17 +26,17 @@ export class ClaimDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap
       .pipe(switchMap(params => this.claimsService.findByClaimNumber(params.get('claimNumber'))))
-      .subscribe(
-        claim => {
+      .subscribe({
+        next: claim => {
           this.claim = claim;
           this.loading = false;
           this.loadDocuments(claim.claimNumber);
         },
-        () => {
+        error: () => {
           this.loading = false;
           this.snackBar.open('This claim could not be retrieved. Try again shortly.', 'Dismiss', { duration: 6000 });
         }
-      );
+      });
   }
 
   withdraw(): void {
@@ -51,9 +51,9 @@ export class ClaimDetailComponent implements OnInit {
   }
 
   private loadDocuments(claimNumber: string): void {
-    this.legacyDocumentService.listDocuments(claimNumber).subscribe(
-      documents => this.documents = documents,
-      () => this.documents = []
-    );
+    this.legacyDocumentService.listDocuments(claimNumber).subscribe({
+      next: documents => this.documents = documents,
+      error: () => this.documents = []
+    });
   }
 }

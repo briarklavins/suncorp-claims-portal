@@ -1,0 +1,22 @@
+// Shared brand theming helpers. Each brand theme `@use`s this module and calls
+// the `brand` mixin with its palette; components consume the CSS custom
+// properties (`--brand-primary` etc.) so a single build serves every brand host.
+
+$header-text: #ffffff;
+$header-padding: 12px 24px;
+
+@mixin brand($key, $primary, $secondary, $accent: null, $header-background: $secondary) {
+  .sun-brand-#{$key} {
+    --brand-primary: #{$primary};
+    --brand-secondary: #{$secondary};
+    @if $accent {
+      --brand-accent: #{$accent};
+    }
+
+    .sun-brand-header {
+      background-color: $header-background;
+      color: $header-text;
+      padding: $header-padding;
+    }
+  }
+}

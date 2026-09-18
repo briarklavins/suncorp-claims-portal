@@ -24,13 +24,13 @@ export class SettlementStepComponent implements OnInit {
   ngOnInit(): void {
     if (this.postcode) {
       this.loadingRepairers = true;
-      this.smashRepairerService.findNearby(this.postcode).subscribe(
-        repairers => {
+      this.smashRepairerService.findNearby(this.postcode).subscribe({
+        next: repairers => {
           this.repairers = repairers;
           this.loadingRepairers = false;
         },
-        () => this.loadingRepairers = false
-      );
+        error: () => this.loadingRepairers = false
+      });
     }
   }
 

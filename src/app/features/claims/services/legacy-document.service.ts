@@ -30,7 +30,7 @@ export class LegacyDocumentService {
     return this.http.get<FileNetEnvelope>(this.documentUrl, { headers, params: { claimNumber } })
       .pipe(
         map(envelope => envelope.FILENET_RESPONSE.DOCUMENTS),
-        catchError((error: HttpErrorResponse) => throwError(error))
+        catchError((error: HttpErrorResponse) => throwError(() => error))
       );
   }
 

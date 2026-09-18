@@ -29,13 +29,13 @@ export class ClaimListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.claimsService.findRecentClaims(100).subscribe(
-      claims => {
+    this.claimsService.findRecentClaims(100).subscribe({
+      next: claims => {
         this.dataSource.data = claims;
         this.loading = false;
       },
-      () => this.loading = false
-    );
+      error: () => this.loading = false
+    });
 
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())

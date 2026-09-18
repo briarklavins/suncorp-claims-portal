@@ -22,7 +22,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           this.authService.redirectToLogin();
         }
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
