@@ -49,7 +49,7 @@ describe('AppComponent', () => {
   });
 
   it('should start the session timeout watcher', () => {
-    const timeoutService = TestBed.get(SessionTimeoutService);
+    const timeoutService = TestBed.inject(SessionTimeoutService);
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     expect(timeoutService.start).toHaveBeenCalled();
