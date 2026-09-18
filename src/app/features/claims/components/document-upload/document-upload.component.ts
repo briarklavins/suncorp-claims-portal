@@ -13,8 +13,8 @@ export class DocumentUploadComponent {
   @Input()
   claimNumber: string;
 
-  @ViewChild('fileInput')
-  fileInput: ElementRef;
+  @ViewChild('fileInput', { static: true })
+  fileInput: ElementRef<HTMLInputElement>;
 
   uploaded: ClaimDocument[] = [];
   progress = 0;
@@ -58,8 +58,8 @@ export class DocumentUploadComponent {
     const request = new HttpRequest('POST', environment.documentUploadUrl, formData, { reportProgress: true });
 
     this.uploading = true;
-    this.http.request(request).subscribe(
-      event => {
+    this.http.request(request).subscribe({
+      next: event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress = Math.round(100 * event.loaded / (event.total || 1));
         } else if (event.type === HttpEventType.Response) {
@@ -68,10 +68,10 @@ export class DocumentUploadComponent {
           this.progress = 0;
         }
       },
-      () => {
+      error: () => {
         this.uploading = false;
         this.errorMessage = 'The document could not be uploaded. Try again or attach it later.';
       }
-    );
+    });
   }
 }

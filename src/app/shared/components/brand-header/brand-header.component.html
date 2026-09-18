@@ -1,6 +1,6 @@
-<header class="sun-brand-header" fxLayout="row" fxLayoutAlign="space-between center">
+<header class="sun-brand-header">
 
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+  <div class="sun-brand-header-start">
     <button mat-icon-button aria-label="Toggle navigation" (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -9,7 +9,7 @@
     <span class="sun-brand-title">Claims lodgement</span>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px">
+  <div class="sun-brand-header-end">
     <span class="sun-brand-phone" *ngIf="brand">Claims {{ brand.contactNumber }} &middot; {{ brand.claimsHours }}</span>
     <span class="sun-consultant" *ngIf="consultantName">{{ consultantName }}</span>
   </div>

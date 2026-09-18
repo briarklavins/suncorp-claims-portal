@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { Claim, ClaimStatus } from '../../../shared/models/claim.model';
@@ -52,11 +51,11 @@ export class ClaimsService {
    * Used by the print view, which needs the claim resolved before the window opens.
    */
   getClaimSnapshot(claimNumber: string): Promise<Claim> {
-    return this.http.get<Claim>(this.baseUrl + '/' + claimNumber).toPromise();
+    return lastValueFrom(this.http.get<Claim>(this.baseUrl + '/' + claimNumber));
   }
 
-  private handleError(message: string, error: any): Observable<never> {
+  private handleError(message: string, error: unknown): Observable<never> {
     this.loggingService.error(message, error);
-    return throwError(error);
+    return throwError(() => error);
   }
 }

@@ -1,16 +1,8 @@
+@use 'brand';
+
 // Suncorp Insurance brand palette
 $sun-primary: #ffb300;
 $sun-secondary: #003057;
 $sun-accent: #00a1de;
 
-.sun-brand-suncorp {
-  --brand-primary: #{$sun-primary};
-  --brand-secondary: #{$sun-secondary};
-  --brand-accent: #{$sun-accent};
-}
-
-.sun-brand-header {
-  background-color: $sun-secondary;
-  color: #ffffff;
-  padding: 12px 24px;
-}
+@include brand.brand('suncorp', $sun-primary, $sun-secondary, $sun-accent);

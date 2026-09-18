@@ -1,4 +1,4 @@
-FROM docker.suncorp.com.au/base/node:12.16.3-alpine AS build
+FROM docker.suncorp.com.au/base/node:20.20.2-alpine AS build
 
 WORKDIR /build
 COPY package.json package-lock.json ./

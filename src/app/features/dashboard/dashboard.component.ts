@@ -23,13 +23,13 @@ export class DashboardComponent implements OnInit {
     const brand = this.brandThemeService.getActiveBrand();
     this.brandName = brand ? brand.displayName : 'Suncorp Insurance';
 
-    this.claimsService.findRecentClaims(10).subscribe(
-      claims => {
+    this.claimsService.findRecentClaims(10).subscribe({
+      next: claims => {
         this.recentClaims = claims;
         this.loading = false;
       },
-      () => this.loading = false
-    );
+      error: () => this.loading = false
+    });
   }
 
   countByStatus(status: string): number {
