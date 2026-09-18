@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'sun-incident-details-step',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 export class IncidentDetailsStepComponent {
 
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   @Input()
   states: string[] = [];

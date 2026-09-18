@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoliciesService } from '../../services/policies.service';
 import { Policy, PolicySummary } from '../../../../shared/models/policy.model';
@@ -10,13 +10,13 @@ import { Policy, PolicySummary } from '../../../../shared/models/policy.model';
 })
 export class PolicyLookupComponent {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   policy: Policy;
   customerPolicies: PolicySummary[] = [];
   searching = false;
   notFound = false;
 
-  constructor(private formBuilder: FormBuilder, private policiesService: PoliciesService) {
+  constructor(private formBuilder: UntypedFormBuilder, private policiesService: PoliciesService) {
     this.form = this.formBuilder.group({
       searchType: ['POLICY_NUMBER', Validators.required],
       searchValue: ['', Validators.required]
