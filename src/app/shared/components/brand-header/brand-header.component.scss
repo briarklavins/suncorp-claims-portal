@@ -1,3 +1,23 @@
+.sun-brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sun-brand-header-start,
+.sun-brand-header-end {
+  display: flex;
+  align-items: center;
+}
+
+.sun-brand-header-start {
+  gap: 12px;
+}
+
+.sun-brand-header-end {
+  gap: 16px;
+}
+
 .sun-brand-logo {
   height: 28px;
 }

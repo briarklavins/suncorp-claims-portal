@@ -18,7 +18,7 @@ export class ClaimsService {
 
   findRecentClaims(limit: number): Observable<Claim[]> {
     const params = new HttpParams().set('limit', String(limit)).set('sort', 'lodgedAt,desc');
-    return this.http.get<Claim[]>(this.baseUrl, { params: params })
+    return this.http.get<Claim[]>(this.baseUrl, { params })
       .pipe(catchError(error => this.handleError('Unable to retrieve recent claims', error)));
   }
 
@@ -44,7 +44,7 @@ export class ClaimsService {
   }
 
   updateStatus(claimNumber: string, status: ClaimStatus): Observable<Claim> {
-    return this.http.patch<Claim>(this.baseUrl + '/' + claimNumber, { status: status })
+    return this.http.patch<Claim>(this.baseUrl + '/' + claimNumber, { status })
       .pipe(catchError(error => this.handleError('Unable to update claim ' + claimNumber, error)));
   }
 

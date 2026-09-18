@@ -1,3 +1,9 @@
+.sun-tiles {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 24px;
+}
+
 .sun-tile {
   min-width: 160px;
   padding: 16px;

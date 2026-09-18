@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'node-12' }
+    agent { label 'node-20' }
 
     environment {
         NPM_REGISTRY = 'https://artifactory.suncorp.com.au/artifactory/api/npm/npm-virtual'
@@ -43,7 +43,8 @@ pipeline {
         stage('E2E') {
             when { branch 'develop' }
             steps {
-                sh 'npm run e2e'
+                sh 'npx playwright install --with-deps chromium'
+                sh 'CI=true npm run e2e'
             }
         }
     }

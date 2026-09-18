@@ -10,19 +10,19 @@ import { ClaimDocument } from '../../../../shared/models/claim.model';
 })
 export class DocumentUploadComponent {
 
+  private static readonly MAX_BYTES = 10 * 1024 * 1024;
+  private static readonly ACCEPTED = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf'];
+
   @Input()
   claimNumber: string;
 
-  @ViewChild('fileInput')
+  @ViewChild('fileInput', { static: false })
   fileInput: ElementRef;
 
   uploaded: ClaimDocument[] = [];
   progress = 0;
   uploading = false;
   errorMessage: string;
-
-  private static readonly MAX_BYTES = 10 * 1024 * 1024;
-  private static readonly ACCEPTED = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf'];
 
   constructor(private http: HttpClient) {
   }
@@ -58,8 +58,8 @@ export class DocumentUploadComponent {
     const request = new HttpRequest('POST', environment.documentUploadUrl, formData, { reportProgress: true });
 
     this.uploading = true;
-    this.http.request(request).subscribe(
-      event => {
+    this.http.request(request).subscribe({
+      next: event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress = Math.round(100 * event.loaded / (event.total || 1));
         } else if (event.type === HttpEventType.Response) {
@@ -68,10 +68,10 @@ export class DocumentUploadComponent {
           this.progress = 0;
         }
       },
-      () => {
+      error: () => {
         this.uploading = false;
         this.errorMessage = 'The document could not be uploaded. Try again or attach it later.';
       }
-    );
+    });
   }
 }

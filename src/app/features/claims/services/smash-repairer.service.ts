@@ -30,6 +30,6 @@ export class SmashRepairerService {
       .set('radiusKm', String(radiusKm))
       .set('network', 'PREFERRED');
 
-    return this.http.get<SmashRepairer[]>(environment.claimsApiBaseUrl + '/repairers', { params: params });
+    return this.http.get<SmashRepairer[]>(environment.claimsApiBaseUrl + '/repairers', { params });
   }
 }

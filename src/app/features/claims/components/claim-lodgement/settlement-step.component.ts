@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { SmashRepairerService, SmashRepairer } from '../../services/smash-repairer.service';
 
@@ -10,7 +10,7 @@ import { SmashRepairerService, SmashRepairer } from '../../services/smash-repair
 export class SettlementStepComponent implements OnInit {
 
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   @Input()
   postcode: string;

@@ -1,3 +1,4 @@
+/.angular/cache
 node_modules/
 dist/
 out-tsc/
@@ -8,3 +9,4 @@ test-results/
 *.log
 .idea/
 .vscode/
+playwright-report/

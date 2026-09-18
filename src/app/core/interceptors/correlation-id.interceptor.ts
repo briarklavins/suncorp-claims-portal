@@ -9,17 +9,17 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class CorrelationIdInterceptor implements HttpInterceptor {
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request.clone({
-      setHeaders: { 'X-Correlation-Id': CorrelationIdInterceptor.newCorrelationId() }
-    }));
-  }
-
   private static newCorrelationId(): string {
     let id = '';
     for (let i = 0; i < 16; i++) {
       id += Math.floor(Math.random() * 16).toString(16);
     }
     return 'CLM-' + id.toUpperCase();
+  }
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(request.clone({
+      setHeaders: { 'X-Correlation-Id': CorrelationIdInterceptor.newCorrelationId() }
+    }));
   }
 }

@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { FormControl } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { UntypedFormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ClaimsService } from '../../services/claims.service';
@@ -10,35 +12,44 @@ import { Claim } from '../../../../shared/models/claim.model';
   selector: 'sun-claim-list',
   templateUrl: './claim-list.component.html'
 })
-export class ClaimListComponent implements OnInit {
+export class ClaimListComponent implements OnInit, AfterViewInit {
 
   displayedColumns = ['claimNumber', 'policyNumber', 'claimType', 'status', 'lodgedAt', 'actions'];
   dataSource = new MatTableDataSource<Claim>([]);
-  searchControl = new FormControl('');
+  searchControl = new UntypedFormControl('');
   loading = true;
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
-  @ViewChild(MatSort)
-  sort: MatSort;
+  // The sortable table sits behind *ngIf="!loading", so MatSort is created after ngAfterViewInit.
+  @ViewChild(MatSort, { static: false })
+  set sort(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
+
+  get sort(): MatSort {
+    return this.dataSource.sort;
+  }
 
   constructor(private claimsService: ClaimsService) {
   }
 
   ngOnInit(): void {
-    this.claimsService.findRecentClaims(100).subscribe(
-      claims => {
+    this.claimsService.findRecentClaims(100).subscribe({
+      next: claims => {
         this.dataSource.data = claims;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
         this.loading = false;
       },
-      () => this.loading = false
-    );
+      error: () => this.loading = false
+    });
 
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(term => this.dataSource.filter = String(term).trim().toLowerCase());
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 }
